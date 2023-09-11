@@ -3,10 +3,152 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WorkTracker"
+        xmlns:local="clr-namespace:WorkTracker.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Height="600" Width="1000">
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
 
+    <Window.Resources>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="#F0F0F0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="20" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="20" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="250" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="BorderBrush" Value="#CCCCCC" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Width" Value="250" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="BorderBrush" Value="#CCCCCC" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="220" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Background" Value="#007ACC" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style TargetType="ListView">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="BorderBrush" Value="#CCCCCC" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <TabControl>
+            <!-- Employee Tab -->
+            <TabItem Header="Dolgozó felvétele">
+                <StackPanel>
+                    <Label Content="Adja meg a dolgozó nevét" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="employeeNameTextBox" 
+                             Text="{Binding EmployeeName, Mode=TwoWay}" />
+                    <Button Content="Dolgozó felvétele" Command="{Binding AddEmployeeCommand}" />
+                </StackPanel>
+            </TabItem>
+
+            <!-- Activity Log Tab -->
+            <TabItem Header="Munkavégzés rögzítése">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="Dolgozó kiválasztása*" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                    <ComboBox x:Name="employeeComboBox" Grid.Row="0" Grid.Column="1" DisplayMemberPath="Name" Margin="20 10 0 0" HorizontalAlignment="Left"
+                              ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}" />
+
+                    <Label Content="Munka megnevezése*" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                    <ComboBox x:Name="activityTitleComboBox" Grid.Row="1" Grid.Column="1" Margin="20 10 0 0" HorizontalAlignment="Left"
+          ItemsSource="{Binding ActivityTitleOptions}"
+          Text="{Binding SelectedActivityTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True" />
+
+                    <Label Content="Munka leírása" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                    <TextBox x:Name="activityDescriptionTextBox" Grid.Row="2" Grid.Column="1" Margin="20 10 0 0" HorizontalAlignment="Left"
+                             Text="{Binding ActivityDescription, Mode=TwoWay}" />
+
+                    <Label Content="Munkavégzés időtartama*" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
+                        <ComboBox x:Name="activityHoursComboBox" Width="50" Margin="20 10 0 0" HorizontalAlignment="Left"
+    IsEditable="True" IsTextSearchEnabled="False" 
+    ItemsSource="{Binding ActivityHoursOptions, UpdateSourceTrigger=PropertyChanged}" 
+    Text="{Binding ActivityHoursText , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Content="óra" Margin="5 10 0 0"/>
+                        <ComboBox x:Name="activityMinutesComboBox" Width="50" Margin="20 10 0 0" HorizontalAlignment="Left"
+    IsEditable="True" IsTextSearchEnabled="False" 
+    ItemsSource="{Binding ActivityMinutesOptions, UpdateSourceTrigger=PropertyChanged}" 
+    Text="{Binding ActivityMinutesText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Content="perc (0-59)" Margin="5 10 0 0"/>
+                    </StackPanel>
+
+                    <Label Content="Megjegyzés" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                    <TextBox x:Name="activityCommentTextBox" Grid.Row="4" Grid.Column="1" Margin="20 10 0 0" HorizontalAlignment="Left"
+                             Text="{Binding ActivityComment, Mode=TwoWay}" />
+
+                    <Button Content="Rögzítés" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding LogActivityCommand}" />
+                    <Label Content="A *-al jelölt mezők kitöltése kötelező" FontSize="14" Grid.Row="5" Margin="0,0,250,60" />
+                </Grid>
+            </TabItem>
+
+            <!-- View Activities Tab -->
+            <TabItem Header="Összegzés">
+                <StackPanel>
+                    <ComboBox x:Name="employeeActivitiesComboBox" DisplayMemberPath="Name" Margin="10"
+                              ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}" />
+                    <Button Content="Kiválasztás" Margin="10" Command="{Binding ViewActivitiesCommand}" />
+                    <Button x:Name="exportButton" Content="Exportálás CSV-be" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ExportCommand}" />
+                    <ListView x:Name="activitiesListView" Margin="10"
+                              ItemsSource="{Binding Activities}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Rögzítés dátuma" DisplayMemberBinding="{Binding Date}" Width="250"/>
+                                <GridViewColumn Header="Megnevezés" DisplayMemberBinding="{Binding Title}" Width="100"/>
+                                <GridViewColumn Header="Leírás" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                                <GridViewColumn Header="Időtartam" DisplayMemberBinding="{Binding Duration}" Width="100"/>
+                                <GridViewColumn Header="Megjegyzés" DisplayMemberBinding="{Binding Comment}" Width="300"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
