@@ -21,15 +21,15 @@ WorkTracker is a Windows Presentation Foundation (WPF) application designed to h
 
 To get started with the WorkTracker application, follow these steps:
 
-1. **Clone the Repository**:
+### **Clone the Repository**:
 
 ```bash
-git clone https://github.com/YourUsername/YourRepository.git
+git clone https://github.com/zsoltgeier/WorkTracker.git
 ```
 
-2. **Build the Project**:
+### **Build the Project**:
 Open the solution in Visual Studio and build the project.
-3. **Run Database Migrations**:
+### **Run Database Migrations**:
 Before running the application, execute the following command in the Package Manager Console to apply database migrations:
 
 ```bash
@@ -38,7 +38,7 @@ Update-Database
 
 This will set up the database schema required for the application.
 
-4. **Run the Application**:
+### **Run the Application**:
 Start the application, and you'll be greeted with a user-friendly interface for managing employees and logging activities.
 
 ## Usage
